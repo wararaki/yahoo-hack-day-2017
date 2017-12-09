@@ -38,7 +38,7 @@ def analyze():
         # get images
         req_time = request.args.get('current_time')
         images = request.args.get('images')
-        
+        print(request.args)
         # check
         result_flag = validate_images(images)
         images = [image+"_ok" for image in images]
