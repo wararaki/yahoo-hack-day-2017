@@ -132,7 +132,7 @@ def analyze():
             flag_start_time = None
             flag_alert = False
 
-        body = json.dumps({"status": True,  "alert_signal": alert_signal, "reckless_level": reckless_level, "predicts": predicts})
+        body = json.dumps({"status": True,  "alert_signal": alert_signal, "reckless_level": reckless_level, "predicts": predicts, "current_time": req_time})
         response = Response(body, status=200, mimetype='application/json')
     else:
         body = json.dumps({"message": "bad request."})
