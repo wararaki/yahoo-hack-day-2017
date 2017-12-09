@@ -25,7 +25,7 @@ def validate_images(images):
     # if near, return true
     return False
 
-@app.route("/api/reckless_driving/analyze", method=["POST"])
+@app.route("/api/reckless_driving/analyze", method=["GET", "POST"])
 def analyze():
     '''
     analyze driving
