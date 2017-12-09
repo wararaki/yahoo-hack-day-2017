@@ -154,7 +154,7 @@ def report():
         images = [image+"_ok" for image in images]
         # images processing
         body = json.dumps({"status": True, "images": images})
-        response = Response(body, status=400, mimetype="application/json")
+        response = Response(body, status=200, mimetype="application/json")
     else:
         body = json.dumps({"message": "bad request"})
         response = Response(body, status=400, mimetype="application/json")
