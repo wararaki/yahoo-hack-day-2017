@@ -28,7 +28,7 @@ application/json
 ```
 
 #### Response
-##### 200
+##### Status code: 200
 ```
 {
   "status": true,
@@ -60,7 +60,7 @@ application/json
 ```
 
 #### Response
-##### 200
+##### Status code: 200
 
 ```
 {
