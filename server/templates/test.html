@@ -28,8 +28,16 @@
                     $("#analyze_btn").on("click", function(){
                         // analyzing
                         $.ajax({
-                            type: 'get',
-                            url: './api/reckless_driving/analyze'
+                            type: 'POST',
+                            url: './api/reckless_driving/analyze',
+                            data: {
+                                "current_time": '2017-01-01 00:00:00',
+                                "images": [
+                                    "image1",
+                                    "image2",
+                                    "image3"
+                                ]
+                            }
                         }).done(function(response){
                             $('#analyze_result').text(response)
                         })
