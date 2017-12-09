@@ -26,7 +26,7 @@ def validate_images(images):
     return False
 
 @app.route("/api/reckless_driving/analyze", methods=["GET", "POST"])
-def analyze():
+def analyze(data):
     '''
     analyze driving
     '''
@@ -38,7 +38,7 @@ def analyze():
         # get images
         req_time = request.args.get('current_time')
         images = request.args.get('images')
-        print(request.args)
+        print(data)
         # check
         result_flag = validate_images(images)
         images = [image+"_ok" for image in images]
