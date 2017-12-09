@@ -24,6 +24,13 @@ def analyze():
     return response
 
 
+@app.route("/test")
+def index():
+    '''
+    return testpage
+    '''
+    return render_template('test.html')
+
 
 @app.route("/sample")
 def sample():

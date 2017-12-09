@@ -1,0 +1,41 @@
+<html>
+    <head>
+        <title>test page</title>
+    </head>
+    <body>
+        <h1>api test page</h1>
+        <div>
+            <div>
+                <h3>sample request pages</h3>
+            </div>
+            <div style="padding-top: 20px">
+                <div>
+                    analyze api test
+                </div>
+                <div>
+                    <button id="analyze_btn" type="button">analyze test</button>
+                </div>
+                <div>analyze api output result</div>
+                <div style="border: solid 1px #000; height: 300px; width: 300px;" id="analyze_result"></div>
+            </div>
+        </div>
+        <div>
+            <!-- load script -->
+            <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+            <script>
+                $(function(){
+                    // write javascript codes
+                    $("#analyze_btn").on("click", function(){
+                        // analyzing
+                        $.ajax({
+                            type: 'get',
+                            url: './api/reckless_driving/analyze'
+                        }).done(function(response){
+                            $('#analyze_result').text(response)
+                        })
+                    });
+                });
+            </script>
+        </div>
+    </body>
+</html>
