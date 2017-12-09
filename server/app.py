@@ -1,10 +1,29 @@
 '''
 sample application
 '''
+# load libraries
+import json
+from flask import Flask, render_template, request, Response
 
-from flask import Flask
+# generate application instance
+app = Flask("Yahoo Hack Day 2017")
 
-app = Flask("sample")
+
+@app.route("/api/reckless_driving/analyze", method=["POST"])
+def analyze():
+    '''
+    analyze driving
+    '''
+    if request.method == 'POST':
+        body = json.dumps({"id": 1, "answer": 5})
+        response = Response(body, status=200, mimetype='application/json')
+    else:
+        body = json.dumps({"message": "get reqiest"})
+        response = Response(body, status=200, mimetype='application/json')
+
+    return response
+
+
 
 @app.route("/sample")
 def sample():
