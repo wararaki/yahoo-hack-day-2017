@@ -4,7 +4,7 @@ sample application
 # load libraries
 import json
 import time
-from flask import Flask, render_template, request, Response
+from flask import Flask, render_template, request, Response, jsonify
 
 # generate application instance
 app = Flask("Yahoo Hack Day 2017")
@@ -26,19 +26,21 @@ def validate_images(images):
     return False
 
 @app.route("/api/reckless_driving/analyze", methods=["GET", "POST"])
-def analyze(data):
+def analyze():
     '''
     analyze driving
     '''
     # flag check
     global flag_alert
     global flag_start_time
+    
+    request_json = request.json
 
     if request.method == 'POST':
         # get images
-        req_time = request.args.get('current_time')
-        images = request.args.get('images')
-        print(data)
+        req_time = request_json.get('current_time')
+        images = request_json.get('images')
+        print(request_json)
         # check
         result_flag = validate_images(images)
         images = [image+"_ok" for image in images]

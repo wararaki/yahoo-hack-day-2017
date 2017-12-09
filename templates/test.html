@@ -29,19 +29,24 @@
                         // analyzing
                         $.ajax({
                             type: 'POST',
-                            url: './api/reckless_driving/analyze',
-                            data: {
+                            url: '/api/reckless_driving/analyze',
+                            contentType: 'application/json',
+                            dataType: 'json',
+                            data: JSON.stringify({
                                 "current_time": '2017-01-01 00:00:00',
                                 "images": [
                                     "image1",
                                     "image2",
                                     "image3"
                                 ]
-                            }
+                            })
                         }).done(function(response){
+                            console.log('ok')
                             $('#analyze_result').text(response)
                         })
                     });
+
+                    return;
                 });
             </script>
         </div>
