@@ -1,19 +1,18 @@
-# API仕様
+## API仕様
 
-## あおり運転判定API
-### 概要
+### あおり運転判定API
 画像を送信して、あおり運転を判定する
 
-### URL
+#### URL
 /api/reckless_driving/image_upload
 
-### Method
+#### Method
 PUT
 
-### Content Type
+#### Content Type
 application/json
 
-### Request 
+#### Request 
 
 ```
 {
@@ -28,7 +27,7 @@ application/json
 }
 ```
 
-### Response
+#### Response
 
 ```
 {
