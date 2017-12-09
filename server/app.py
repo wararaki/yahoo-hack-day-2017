@@ -44,7 +44,7 @@ def analyze():
         # check
         result_flag = validate_images(images)
         images = [image+"_ok" for image in images]
-        
+
         # alert check
         alert_signal = False
         reckless_level = 0
@@ -66,9 +66,29 @@ def analyze():
         body = json.dumps({"status": True,  "alert_signal": alert_signal, "reckless_level": reckless_level, "images": images, "current_time": req_time})
         response = Response(body, status=200, mimetype='application/json')
     else:
-        body = json.dumps({"message": "get reqiest"})
-        response = Response(body, status=200, mimetype='application/json')
+        body = json.dumps({"message": "bad request."})
+        response = Response(body, status=400, mimetype='application/json')
         flag = False
+
+    return response
+
+
+@app.route("/api/reckless_driving/report", methods=["POST"])
+def report():
+    '''
+    report
+    '''
+    request_json = request.json
+
+    if request.method == "POST":
+        images = request_json.get("images")
+        images = [image+"_ok" for image in images]
+        # images processing
+        body = json.dumps({"status": True, "images": images})
+        response = Response(body, status=400, mimetype="application/json")
+    else:
+        body = json.dumps({"message": "bad request"})
+        response = Response(body, status=400, mimetype="application/json")
 
     return response
 

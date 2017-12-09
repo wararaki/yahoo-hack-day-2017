@@ -8,6 +8,7 @@
             <div>
                 <h3>sample request pages</h3>
             </div>
+            <!-- analyze api test -->
             <div style="padding-top: 20px">
                 <div>
                     analyze api test
@@ -18,7 +19,19 @@
                 <div>analyze api output result</div>
                 <div style="border: solid 1px #000; height: 300px; width: 300px;" id="analyze_result"></div>
             </div>
+            <!-- report api test -->
+            <div style="padding-top: 20px">
+                <div>
+                    report api test
+                </div>
+                <div>
+                    <button id="report_btn" type="button">report test</button>
+                </div>
+                <div>report api output result</div>
+                <div style="border: solid 1px #000; height: 300px; width: 300px;" id="report_result"></div>
+            </div>
         </div>
+        
         <div>
             <!-- load script -->
             <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -43,6 +56,26 @@
                         }).done(function(response){
                             console.log('ok')
                             $('#analyze_result').text(response)
+                        })
+                    });
+
+                    $("#report_btn").on("click", function(){
+                        // analyzing
+                        $.ajax({
+                            type: 'POST',
+                            url: '/api/reckless_driving/report',
+                            contentType: 'application/json',
+                            dataType: 'json',
+                            data: JSON.stringify({
+                                "images": [
+                                    "image1",
+                                    "image2",
+                                    "image3"
+                                ]
+                            })
+                        }).done(function(response){
+                            console.log('ok')
+                            $('#report_result').text(response)
                         })
                     });
 
