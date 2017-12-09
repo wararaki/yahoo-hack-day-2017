@@ -5,16 +5,21 @@ sample application
 import json
 import time
 import base64
+from io import BytesIO
 from PIL import Image
 import numpy as np
 from flask import Flask, render_template, request, Response
 from keras.models import load_model
+from keras.preprocessing.image import img_to_array
+import tensorflow as tf
 
 # generate application instance
 app = Flask("Yahoo Hack Day 2017")
 
 # load model
 model = load_model("models/detect_model.hdf5")
+model._make_predict_function()
+tf_graph = tf.get_default_graph()
 
 # define flags
 flag_alert = False
@@ -25,10 +30,14 @@ def fix_base64_to_np(b64_img):
     convert data
     '''
     str_img = b64_img.replace('data:image/jpeg;base64,', '')
-    buf = base64.b64decode(str_img).encode('utf-8')
+    # print(str_img)
+    buf = BytesIO(base64.b64decode(str_img))#.encode('utf-8')
     img = Image.open(buf)
     img = img.resize((100, 100))
-    data = np.array(img.asarray())
+    img = img.convert('RGB')
+    data = np.array([np.asarray(img)])
+    # data = img_to_array(img)
+    # print(data.shape)
     return data
 
 
@@ -38,17 +47,23 @@ def validate_images(images):
     '''
     ## base64 convert
     cnt = 0
+    predicts = []
     for image in images:
         data = fix_base64_to_np(image)
-        result = model.predict(data)
-        print(result)
+        with tf_graph.as_default():
+            result = model.predict_classes(data)
+        # print(result)
         cnt += result
-        # check(image)
-    
+        if result == 0:
+            predicts.append('near')
+        elif result == 1:
+            predicts.append('far')
+        else:
+            predicts.append('unknown')
+
     # if near, return true
-    if cnt > 3:
-        return True
-    return False
+    result_flag = cnt > len(images)
+    return result_flag, predicts
 
 
 @app.route("/api/detect", methods=["POST"])
@@ -60,13 +75,14 @@ def detect():
     if request.method == 'POST':
         img = request_json.get('image')
         data = fix_base64_to_np(img)
-        pred = model.predict(data)
+        with tf_graph.as_default():
+            pred = model.predict_classes(data)
         if pred == 0:
             msg = 'near'
         elif pred == 1:
             msg = 'far'
         else:
-            msg = 'error'
+            msg = pred
         body = json.dumps({"predict": msg})
         response = Response(body, status=200, mimetype='application/json')
     else:
@@ -94,9 +110,9 @@ def analyze():
         images = request_json.get('images')
         # print(request_json)
         # check
-        # result_flag = validate_images(images)
-        result_flag = False
-        images = [image+"_ok" for image in images]
+        result_flag, predicts = validate_images(images)
+        # result_flag = False
+        # images = [image+"_ok" for image in images]
 
         # alert check
         alert_signal = False
@@ -116,7 +132,7 @@ def analyze():
             flag_start_time = None
             flag_alert = False
 
-        body = json.dumps({"status": True,  "alert_signal": alert_signal, "reckless_level": reckless_level, "images": images, "current_time": req_time})
+        body = json.dumps({"status": True,  "alert_signal": alert_signal, "reckless_level": reckless_level, "predicts": predicts})
         response = Response(body, status=200, mimetype='application/json')
     else:
         body = json.dumps({"message": "bad request."})

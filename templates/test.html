@@ -14,6 +14,9 @@
                     analyze api test
                 </div>
                 <div>
+                    <input type='file' id='upload-file' />
+                </div>
+                <div>
                     <button id="analyze_btn" type="button">analyze test</button>
                 </div>
                 <div>analyze api output result</div>
@@ -31,7 +34,7 @@
                 <div style="border: solid 1px #000; height: 300px; width: 300px;" id="report_result"></div>
             </div>
         </div>
-        
+
         <div>
             <!-- load script -->
             <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -39,24 +42,34 @@
                 $(function(){
                     // write javascript codes
                     $("#analyze_btn").on("click", function(){
-                        // analyzing
-                        $.ajax({
-                            type: 'POST',
-                            url: '/api/reckless_driving/analyze',
-                            contentType: 'application/json',
-                            dataType: 'json',
-                            data: JSON.stringify({
-                                "current_time": '2017-01-01 00:00:00',
-                                "images": [
-                                    "image1",
-                                    "image2",
-                                    "image3"
-                                ]
-                            })
-                        }).done(function(response){
-                            console.log('ok')
-                            $('#analyze_result').text(response)
-                        })
+                        var file = document.querySelector('input[type=file]').files[0];
+                        var reader = new FileReader();
+                        reader.onload = (function(theFile){
+                            return function(e) {
+                                // analyzing
+                                $.ajax({
+                                    type: 'POST',
+                                    url: '/api/reckless_driving/analyze',
+                                    contentType: 'application/json',
+                                    dataType: 'json',
+                                    data: JSON.stringify({
+                                        "current_time": '2017-01-01 00:00:00',
+                                        "images": [
+                                            e.target.result
+                                        ]
+                                    })
+                                }).done(function(response){
+                                    console.log('ok')
+                                    $('#analyze_result').text(response)
+                                })
+                            };
+                        })(file);
+                        
+                        if(file){
+                            reader.readAsDataURL(file);
+                        } else {
+                            alert("file empty!")
+                        }
                     });
 
                     $("#report_btn").on("click", function(){
