@@ -20,7 +20,15 @@
                         <button id="detect_btn" type="button">detect test</button>
                     </div>
                     <div>detect api output result</div>
-                    <div style="border: solid 1px #000; height: 300px; width: 300px;" id="predict_result"></div>
+                    <!-- <div style="border: solid 1px #000; height: 300px; width: 300px;" id="predict_result"></div> -->
+                    <div style="padding-top: 10px;">
+                        <div id="warning-msg">
+                            <h1>あおり運転です！！</h1>
+                        </div>
+                        <div id="sage-msg">
+                            <h1>安全運転です！！</h1>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -32,6 +40,9 @@
                         // write javascript codes
 
                         $("#detect_btn").on("click", function(){
+                            $("#warning-msg").hide();
+                            $("#safe-msg").hide();
+
                             // analyzing
                             var file = document.querySelector('input[type=file]').files[0];
                             var reader = new FileReader();
@@ -48,7 +59,12 @@
                                         })
                                     }).done(function(response){
                                         console.log('ok');
-                                        $('#predict_result').text(response["predict"]);
+                                        // $('#predict_result').text(response["predict"]);
+                                        if(response["predict"] === "near") {
+                                            $("#warning-msg").show();
+                                        } else {
+                                            $("#safe-msg").show();
+                                        }
                                     });
                                     return;
                                 };
