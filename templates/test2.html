@@ -48,7 +48,7 @@
                                         })
                                     }).done(function(response){
                                         console.log('ok');
-                                        $('#predict_result').text(response);
+                                        $('#predict_result').text(response["predict"]);
                                     });
                                     return;
                                 };
