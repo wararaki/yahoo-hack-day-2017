@@ -28,6 +28,9 @@
                         <div id="safe-msg">
                             <h1>安全運転です！！</h1>
                         </div>
+                        <div style="margin-top: 15px;">
+                            <img id="detect-img" src="" />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -67,6 +70,7 @@
                                         } else {
                                             $("#safe-msg").show();
                                         }
+                                        $("#detect-img").attr('src', response["image"])
                                     });
                                     return;
                                 };

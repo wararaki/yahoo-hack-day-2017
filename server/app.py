@@ -12,6 +12,7 @@ from flask import Flask, render_template, request, Response
 from keras.models import load_model
 from keras.preprocessing.image import img_to_array
 import tensorflow as tf
+import websocket
 
 # generate application instance
 app = Flask("Yahoo Hack Day 2017")
@@ -83,7 +84,7 @@ def detect():
             msg = 'far'
         else:
             msg = pred
-        body = json.dumps({"predict": msg})
+        body = json.dumps({"predict": msg, "image": img})
         response = Response(body, status=200, mimetype='application/json')
     else:
         body = json.dumps({"message": "bad request."})
@@ -132,7 +133,7 @@ def analyze():
             flag_start_time = None
             flag_alert = False
 
-        body = json.dumps({"status": True,  "alert_signal": alert_signal, "reckless_level": reckless_level, "predicts": predicts, "current_time": req_time})
+        body = json.dumps({"status": True,  "alert_signal": alert_signal, "reckless_level": reckless_level, "predicts": predicts, "current_time": req_time, "images": images})
         response = Response(body, status=200, mimetype='application/json')
     else:
         body = json.dumps({"message": "bad request."})
