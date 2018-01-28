@@ -54,6 +54,7 @@
                         // write javascript codes
                         $("#warning-msg").hide();
                         $("#safe-msg").hide();
+                        $("#non-ng").hide();
 
                         $("#detect_btn").on("click", function(){
                             $("#warning-msg").hide();
@@ -95,13 +96,15 @@
                             }
                         });
 
-                        $("ng_check_btn").on("click", function(){
+                        $("#ng_check_btn").on("click", function(){
+                            console.log("api")
                             $.ajax({
                                 type: 'GET',
                                 url: '/api/ng_check',
                                 contentType: 'application',
                                 dataType: 'json',
                             }).done(function(response){
+                                console.log("ok")
                                 if(response['is_ng']) {
                                     $("#non-ng").hide()
                                     $("#ng-img").attr('src', response['image'])

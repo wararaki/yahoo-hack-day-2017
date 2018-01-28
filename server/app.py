@@ -169,7 +169,7 @@ def report():
     return response
 
 
-@app.route("/ng_check")
+@app.route("/api/ng_check")
 def ng_check():
     '''
     return ng_checklist
