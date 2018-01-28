@@ -4,6 +4,7 @@ sample application
 # load libraries
 import json
 import time
+import copy
 import base64
 from io import BytesIO
 from PIL import Image
@@ -25,6 +26,9 @@ tf_graph = tf.get_default_graph()
 # define flags
 flag_alert = False
 flag_start_time = None
+
+# ng_image
+ng_info = {"time": None, "image": None}
 
 def fix_base64_to_np(b64_img):
     '''
@@ -80,6 +84,8 @@ def detect():
             pred = model.predict_classes(data)
         if pred == 0:
             msg = 'near'
+            ng_info["time"] = time.time()
+            ng_info["image"] = img
         elif pred == 1:
             msg = 'far'
         else:
@@ -159,6 +165,22 @@ def report():
     else:
         body = json.dumps({"message": "bad request"})
         response = Response(body, status=400, mimetype="application/json")
+
+    return response
+
+
+@app.route("/ng_check")
+def ng_check():
+    '''
+    return ng_checklist
+    '''
+    access_time = time.time()
+    if ng_info.get('time') is None or (access_time - ng_info.get('time')) > 60:
+        body = {"time": None, "image": None, "is_ng": False}
+    else:
+        body = copy.deepcopy(ng_info)
+        body['is_ng'] = True
+    response = Response(json.dumps(body), status=200, mimetype="application/json")
 
     return response
 

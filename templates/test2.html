@@ -29,7 +29,18 @@
                             <h1>安全運転です！！</h1>
                         </div>
                         <div style="margin-top: 15px;">
-                            <img id="detect-img" src="" />
+                            <h3>
+                                煽りチェックAPI
+                            </h3>
+                        </div>
+                        <div>
+                            <button id="ng_check_btn" type="button">ng_check</button>
+                        </div>
+                        <div style="margin-top: 5px;">
+                            <img id="ng-img" src="" />
+                        </div>
+                        <div id="non-ng">
+                            あおりなし
                         </div>
                     </div>
                 </div>
@@ -47,6 +58,7 @@
                         $("#detect_btn").on("click", function(){
                             $("#warning-msg").hide();
                             $("#safe-msg").hide();
+                            $("#non-ng").hide();
 
                             // analyzing
                             var file = document.querySelector('input[type=file]').files[0];
@@ -70,7 +82,7 @@
                                         } else {
                                             $("#safe-msg").show();
                                         }
-                                        $("#detect-img").attr('src', response["image"])
+                                        // $("#detect-img").attr('src', response["image"])
                                     });
                                     return;
                                 };
@@ -81,6 +93,22 @@
                             } else {
                                 alert("file empty!")
                             }
+                        });
+
+                        $("ng_check_btn").on("click", function(){
+                            $.ajax({
+                                type: 'GET',
+                                url: '/api/ng_check',
+                                contentType: 'application',
+                                dataType: 'json',
+                            }).done(function(response){
+                                if(response['is_ng']) {
+                                    $("#non-ng").hide()
+                                    $("#ng-img").attr('src', response['image'])
+                                } else {
+                                    $("#non-ng").show()
+                                }
+                            })
                         });
     
                         return;
